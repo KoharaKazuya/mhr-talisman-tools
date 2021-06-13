@@ -1,0 +1,9 @@
+.zone {
+  width: 100%;
+  height: 100%;
+  background: var(--nc-bg-2);
+  display: grid;
+  place-content: center;
+  padding: 40px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,18 @@
+.button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 4px;
+  background: none;
+  display: grid;
+  place-content: center;
+}
+.button:hover,
+.button:active,
+.button:focus {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  margin: 0;
+}
