@@ -48,16 +48,14 @@ export default function Scanner() {
       </p>
       <details>
         <summary>一括で装飾品を外す方法</summary>
-        <p>
-          次の手順で一括解除できます。
-          <ol>
-            <li>アイテムＢＯＸ を開く</li>
-            <li>装備管理 を開く</li>
-            <li>装飾品の着脱 を開く</li>
-            <li>装備ＢＯＸ を開く</li>
-            <li>一括解除 (マイナスボタン)</li>
-          </ol>
-        </p>
+        <p>次の手順で一括解除できます。</p>
+        <ol>
+          <li>アイテムＢＯＸ を開く</li>
+          <li>装備管理 を開く</li>
+          <li>装飾品の着脱 を開く</li>
+          <li>装備ＢＯＸ を開く</li>
+          <li>一括解除 (マイナスボタン)</li>
+        </ol>
       </details>
       <ScannerComponent />
     </section>

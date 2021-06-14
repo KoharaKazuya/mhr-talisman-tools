@@ -65,6 +65,7 @@ function useScanner() {
           dispatch({ type: "succeeded", talismans, unknownFrames });
         })
         .catch((error) => {
+          console.error(error);
           dispatch({ type: "failed", error });
         });
     },

@@ -68,8 +68,13 @@ export function scan({ abortSignal, files }: Options): Result {
           });
 
           // 動画中のフレームを設定する
-          video.currentTime = t / 30;
-          await new Promise(requestAnimationFrame);
+          await Promise.race([
+            new Promise((resolve) => {
+              video.addEventListener("timeupdate", resolve, { once: true });
+              video.currentTime = t / 30;
+            }),
+            new Promise((r) => setTimeout(r, 1000)), // 上限 1 秒
+          ]);
 
           // 装備ＢＯＸの表示か錬金結果の表示か判定しつつ、
           // アンカー (= 「装備スキル」という文字) を検出して、見つからなければ
