@@ -157,7 +157,7 @@ function useTalismanForm(onSubmit: Props["onSubmit"]) {
   const { handleSubmit, watch } = methods;
   const values = watch();
 
-  const handler = useCallback((data) => {
+  const handler = useCallback((data: any) => {
     try {
       const talisman = createTalisman({
         name: data.name?.value,
