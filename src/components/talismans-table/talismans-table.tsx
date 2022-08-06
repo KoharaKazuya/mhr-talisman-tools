@@ -95,8 +95,10 @@ export default function TalismansTable({ talismans }: Props) {
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
+            // eslint-disable-next-line react/jsx-key -- React Table が key を管理している
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
+                // eslint-disable-next-line react/jsx-key -- React Table が key を管理している
                 <th
                   {...column.getHeaderProps(
                     (column as any).getSortByToggleProps()
@@ -112,8 +114,10 @@ export default function TalismansTable({ talismans }: Props) {
           {rows.map((row) => {
             prepareRow(row);
             return (
+              // eslint-disable-next-line react/jsx-key -- React Table が key を管理している
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => (
+                  // eslint-disable-next-line react/jsx-key -- React Table が key を管理している
                   <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                 ))}
               </tr>

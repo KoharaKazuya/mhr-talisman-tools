@@ -6,7 +6,6 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>護石ツールズ</title>
           <link
             rel="stylesheet"
             href="https://fonts.xz.style/serve/inter.css"

@@ -13,6 +13,7 @@ export default function About() {
           <a
             href="https://github.com/KoharaKazuya/mhr-talisman-tools"
             target="_blank"
+            rel="noreferrer"
           >
             GitHub
           </a>
@@ -25,6 +26,7 @@ export default function About() {
           <a
             href="https://github.com/toropippi/RiseGOSEKIcapture"
             target="_blank"
+            rel="noreferrer"
           >
             RiseGOSEKIcapture
           </a>
@@ -35,11 +37,16 @@ export default function About() {
           <a
             href="https://www.reddit.com/r/MonsterHunterMeta/comments/mn1gmo/talisman_melding_probabilities_and_system_guide/"
             target="_blank"
+            rel="noreferrer"
           >
             Talisman Melding Probabilities and System Guide : MonsterHunterMeta
           </a>
           および
-          <a href="https://hyperwiki.jp/mhr/alchemy/" target="_blank">
+          <a
+            href="https://hyperwiki.jp/mhr/alchemy/"
+            target="_blank"
+            rel="noreferrer"
+          >
             hyperWiki
           </a>
           を参考にさせていただいています。
