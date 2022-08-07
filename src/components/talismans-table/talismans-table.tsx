@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useSortBy, useTable } from "react-table";
+import { Row, useSortBy, useTable } from "react-table";
 import ReactTooltip from "react-tooltip";
 import { AsSlots, calculateAsSlots } from "../../core/as-slots";
 import {
@@ -36,7 +36,7 @@ const columns = [
       <>
         出現確率{" "}
         <span
-          data-tip="フォーマット: {出現確率} - {レア度}<br>出現確率: 同じ性能のスキル・スロット、もしくは (装飾品なしで) 同等以上の性能の護石がマカ錬金・神気で出現する確率<br>レア度: 出現確率をランク分けしたもの"
+          data-tip="フォーマット: {レア度} ({出現確率})<br>レア度: 出現確率を独自基準でランク分けしたもの<br>出現確率: 同じ性能のスキル・スロット、もしくは (装飾品なしで) 同等以上の性能の護石がマカ錬金・神気で出現する確率"
           data-html
         >
           [?]
@@ -44,6 +44,20 @@ const columns = [
       </>
     ),
     accessor: "chance" as const,
+    sortType: (rowA: Row, rowB: Row, columnId: string, desc: boolean) => {
+      const chanceA = rowA.values.chance;
+      const chanceB = rowB.values.chance;
+
+      const rankA = chanceA.replace(/ .*$/, "");
+      const rankB = chanceB.replace(/ .*$/, "");
+      if (rankA === "Z" && rankB !== "Z") return 1;
+      if (rankA !== "Z" && rankB === "Z") return -1;
+
+      const numA = Number(chanceA.replace(/^.*\((.+)%\).*$/, "$1"));
+      const numB = Number(chanceB.replace(/^.*\((.+)%\).*$/, "$1"));
+      if (numA > numB) return 1;
+      if (numA < numB) return -1;
+    },
   },
   {
     Header: (
@@ -132,7 +146,7 @@ export default function TalismansTable({ talismans }: Props) {
 
 function chanceString(chance: number): string {
   const rank = calculateChanceRank(chance);
-  return `${(chance * 100).toFixed(10)}% - ${rank}`;
+  return `${rank} (${(chance * 100).toFixed(10)}%)`;
 }
 
 function asSlotsString({ lv4, lv3, lv2, lv1, alpha }: AsSlots): string {
