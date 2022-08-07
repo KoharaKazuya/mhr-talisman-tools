@@ -36,7 +36,7 @@ const SkillSchema: Describe<Skill> = object({
   level: number(),
 });
 const SlotSchema: Describe<Slot> = object({
-  level: enums([1, 2, 3]),
+  level: enums([1, 2, 3, 4]),
 });
 const BackupSchema: Describe<Backup> = object({
   talismans: array(

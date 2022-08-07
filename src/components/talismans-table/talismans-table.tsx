@@ -36,7 +36,7 @@ const columns = [
       <>
         出現確率{" "}
         <span
-          data-tip="フォーマット: {出現確率} - {レア度}<br>出現確率: 同じ性能のスキル・スロット、もしくは (装飾品なしで) 同等以上の性能の護石がマカ錬金・幽玄で出現する確率<br>レア度: 出現確率をランク分けしたもの"
+          data-tip="フォーマット: {出現確率} - {レア度}<br>出現確率: 同じ性能のスキル・スロット、もしくは (装飾品なしで) 同等以上の性能の護石がマカ錬金・神気で出現する確率<br>レア度: 出現確率をランク分けしたもの"
           data-html
         >
           [?]
@@ -50,7 +50,7 @@ const columns = [
       <>
         装飾品スロット換算{" "}
         <span
-          data-tip="フォーマット: {Lv3の個数},{Lv2の個数},{Lv1の個数}<br>装飾品スロット換算: スキル1およびスキル2を装飾品で再現する場合の必要スロット数を護石のスロット数に加え、レベル別に数えたもの"
+          data-tip="フォーマット: {Lv4の個数},{Lv3の個数},{Lv2の個数},{Lv1の個数}<br>装飾品スロット換算: スキル1およびスキル2を装飾品で再現する場合の必要スロット数を護石のスロット数に加え、レベル別に数えたもの"
           data-html
         >
           [?]
@@ -135,9 +135,9 @@ function chanceString(chance: number): string {
   return `${(chance * 100).toFixed(10)}% - ${rank}`;
 }
 
-function asSlotsString({ lv3, lv2, lv1, alpha }: AsSlots): string {
+function asSlotsString({ lv4, lv3, lv2, lv1, alpha }: AsSlots): string {
   let output = alpha ? "+α " : "";
-  output += `${lv3},${lv2},${lv1}`;
+  output += `${lv4},${lv3},${lv2},${lv1}`;
   return output;
 }
 

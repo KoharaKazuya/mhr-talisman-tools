@@ -22,7 +22,7 @@ export default function About() {
       <section>
         <h2>謝辞</h2>
         <p>
-          スキャンのための画像データは
+          ツールの仕組みは
           <a
             href="https://github.com/toropippi/RiseGOSEKIcapture"
             target="_blank"
@@ -30,16 +30,33 @@ export default function About() {
           >
             RiseGOSEKIcapture
           </a>
-          のものを使用させていただいています。
+          のアイデアから影響を受けました。
         </p>
         <p>
           出現確率の計算のためのデータは
           <a
-            href="https://www.reddit.com/r/MonsterHunterMeta/comments/mn1gmo/talisman_melding_probabilities_and_system_guide/"
+            href="https://teddit.sethforprivacy.com/r/MonsterHunterMeta/comments/vnrktj/rmonsterhuntermetas_megathread_sunbreak_edition/"
             target="_blank"
             rel="noreferrer"
           >
-            Talisman Melding Probabilities and System Guide : MonsterHunterMeta
+            /r/MonsterHunterMeta&rsquo;s Megathread, Sunbreak Edition! Check
+            here for sets &amp; builds! : MonsterHunterMeta
+          </a>
+          ,
+          <a
+            href="https://teddit.sethforprivacy.com/r/MonsterHunterMeta/comments/ud4j20/odds_for_any_charm/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Odds for any charm : MonsterHunterMeta
+          </a>
+          ,
+          <a
+            href="https://docs.google.com/spreadsheets/d/1XzmYu4TorITdiTXISp-te5Ee_E4HieCOCjVk-x-VLXg/edit#gid=708636111"
+            target="_blank"
+            rel="noreferrer"
+          >
+            alchemy(sunBreakPreRelease) - Google スプレッドシート
           </a>
           および
           <a

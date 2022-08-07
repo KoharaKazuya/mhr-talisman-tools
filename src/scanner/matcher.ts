@@ -1,4 +1,6 @@
-import { Skill, Slot } from "../core/mhr";
+import { skillGradeData } from "../core/meding-pod-data/common";
+import type { Skill, Slot } from "../core/mhr";
+import { talismanNames } from "../core/mhr";
 import { skillLevelSize, skillNameSize } from "./config";
 import { loadOpenCV } from "./opencv-loader";
 
@@ -65,23 +67,20 @@ function loadSkillTemplates(): Promise<void> {
 }
 
 async function loadAllTemplates() {
-  const types: string[] = await (await fetch("/type/list.json")).json();
-  const skillNames: string[] = await (await fetch("/skill/list.json")).json();
-
   await Promise.all([
     // アンカー (=「装備スキル」という文字) のテンプレートを読み込む
     loadTemplate("/anchor.png").then((mat) => {
       anchorTemplates.set("anchor", mat);
     }),
     // 護石の種類 (=「初心の護石」など) を読み込む
-    ...types.map((type) =>
+    ...talismanNames.map((type) =>
       loadTemplate(`/type/${type}.png`).then((mat) => {
         typeTemplates.set(type, mat);
       })
     ),
     // スキルのテンプレートを読み込む
-    ...skillNames.map((name, i) =>
-      loadTemplate(`/skill/${i}.png`, true).then((mat) => {
+    ...Array.from(skillGradeData.keys()).map((name) =>
+      loadTemplate(`/skill/${name}.png`).then((mat) => {
         skillTemplates.set(name, mat);
       })
     ),
@@ -92,8 +91,8 @@ async function loadAllTemplates() {
       })
     ),
     // スロットのテンプレートを読み込む
-    ...Array.from({ length: 4 }, (_, i) =>
-      loadTemplate(`/slot/${i}.png`, true).then((mat) => {
+    ...Array.from({ length: 5 }, (_, i) =>
+      loadTemplate(`/slot/${i}.png`).then((mat) => {
         slotTemplates.set(i as any, mat);
       })
     ),
@@ -111,7 +110,7 @@ async function loadAllTemplates() {
   );
 }
 
-async function loadTemplate(url: string, resize = false) {
+async function loadTemplate(url: string) {
   const img = new Image();
   await new Promise((resolve, reject) => {
     img.onload = resolve;
@@ -129,13 +128,6 @@ async function loadTemplate(url: string, resize = false) {
   const mat = cv.matFromImageData(imageData);
   cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
   cv.threshold(mat, mat, 0, 255, cv.THRESH_OTSU);
-  // テンプレートデータは 1920 (1280 の x1.5) 想定で作られているので、リサイズする
-  if (resize) {
-    const size = new cv.Size(
-      Math.round(mat.cols / 1.5),
-      Math.round(mat.rows / 1.5)
-    );
-    cv.resize(mat, mat, size);
-  }
+
   return mat;
 }

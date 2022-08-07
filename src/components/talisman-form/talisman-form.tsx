@@ -20,6 +20,7 @@ const slots = [
   { value: 1, label: "Lv1" },
   { value: 2, label: "Lv2" },
   { value: 3, label: "Lv3" },
+  { value: 4, label: "Lv4" },
 ];
 
 type Props = {
@@ -42,7 +43,7 @@ export default function TalismanForm({ onSubmit: onSubmitSuper }: Props) {
                 value: name,
                 label: name,
               }))}
-              defaultValue="神嵐の護石"
+              defaultValue="天上の護石"
             />
           </label>
         </div>
@@ -161,7 +162,7 @@ function useTalismanForm(onSubmit: Props["onSubmit"]) {
     (data: any) => {
       try {
         const talisman = createTalisman({
-          name: data.name?.value,
+          name: data.name,
           skill1: data.skill1?.value,
           level1: data.level1?.value,
           skill2: data.skill2?.value || undefined,
