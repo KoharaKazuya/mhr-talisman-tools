@@ -45,9 +45,19 @@ async function match<T>(
   // 上限付きで最も差分が小さいテンプレートを検索する
   let min = { mean: threshold, target: null as T | null };
   for (const [key, template] of Array.from(templates.entries())) {
-    const roi = mat.roi(new cv.Rect(0, 0, template.cols, template.rows));
+    // テンプレートマッチングで最もテンプレートが当てはまる位置を探す
+    const dst = new cv.Mat();
+    cv.matchTemplate(mat, template, dst, cv.TM_CCOEFF);
+    const { maxLoc } = cv.minMaxLoc(dst);
+
+    // 差分を計算する
+    const roi = mat.roi(
+      new cv.Rect(maxLoc.x, maxLoc.y, template.cols, template.rows)
+    );
     const diff = new cv.Mat();
     cv.absdiff(roi, template, diff);
+
+    // 以前よりも差分の平均値が小さい場合は最終結果となるテンプレートを更新する
     const mean = cv.mean(diff)[0]; // grayscale なので 0 チャンネルのみ
     if (mean < min.mean) min = { mean, target: key };
   }
