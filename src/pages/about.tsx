@@ -58,6 +58,14 @@ export default function About() {
           >
             alchemy(sunBreakPreRelease) - Google スプレッドシート
           </a>
+          ,
+          <a
+            href="https://mhrise.kiranico.com/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Kiranico | Monster Hunter Rise: Sunbreak
+          </a>
           および
           <a
             href="https://hyperwiki.jp/mhr/alchemy/"
