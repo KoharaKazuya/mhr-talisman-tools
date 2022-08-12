@@ -15,19 +15,19 @@ export async function matchType(imageData: ImageData): Promise<string | null> {
 export async function matchSkillName(
   imageData: ImageData
 ): Promise<Skill["name"] | "" | null> {
-  return await match(imageData, skillTemplates, 100);
+  return await match(imageData, skillTemplates, 50);
 }
 
 export async function matchSkillLevel(
   imageData: ImageData
 ): Promise<Skill["level"] | null> {
-  return await match(imageData, numberTemplates, 100);
+  return await match(imageData, numberTemplates, 50);
 }
 
 export async function matchSlotLevel(
   imageData: ImageData
 ): Promise<Slot["level"] | 0 | null> {
-  return await match(imageData, slotTemplates, 100);
+  return await match(imageData, slotTemplates, 50);
 }
 
 async function match<T>(
@@ -40,19 +40,18 @@ async function match<T>(
 
   const mat = cv.matFromImageData(imageData);
   cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
-  cv.threshold(mat, mat, 0, 255, cv.THRESH_OTSU);
 
   // 上限付きで最も差分が小さいテンプレートを検索する
   let min = { mean: threshold, target: null as T | null };
   for (const [key, template] of Array.from(templates.entries())) {
     // テンプレートマッチングで最もテンプレートが当てはまる位置を探す
     const dst = new cv.Mat();
-    cv.matchTemplate(mat, template, dst, cv.TM_CCOEFF);
-    const { maxLoc } = cv.minMaxLoc(dst);
+    cv.matchTemplate(mat, template, dst, cv.TM_SQDIFF);
+    const { minLoc } = cv.minMaxLoc(dst);
 
     // 差分を計算する
     const roi = mat.roi(
-      new cv.Rect(maxLoc.x, maxLoc.y, template.cols, template.rows)
+      new cv.Rect(minLoc.x, minLoc.y, template.cols, template.rows)
     );
     const diff = new cv.Mat();
     cv.absdiff(roi, template, diff);
@@ -109,14 +108,14 @@ async function loadAllTemplates() {
   ]);
 
   // スキルなし (= 空文字列) のテンプレートを生成する
-  // 比較時に差分ピクセルの平均値を下げないように 1 文字目のみ比較するため、正方形の形状にする
+  // 比較時に文字が書かれていない部分とマッチしてしまわないようにフルサイズで生成する
   skillTemplates.set(
     "",
-    cv.Mat.zeros(skillNameSize.height, skillNameSize.height, 0)
+    cv.Mat.zeros(skillNameSize.height, skillNameSize.width, 0)
   );
   numberTemplates.set(
     0,
-    cv.Mat.zeros(skillLevelSize.height, skillLevelSize.height, 0)
+    cv.Mat.zeros(skillLevelSize.height, skillLevelSize.width, 0)
   );
 }
 
@@ -137,7 +136,6 @@ async function loadTemplate(url: string) {
 
   const mat = cv.matFromImageData(imageData);
   cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
-  cv.threshold(mat, mat, 0, 255, cv.THRESH_OTSU);
 
   return mat;
 }
