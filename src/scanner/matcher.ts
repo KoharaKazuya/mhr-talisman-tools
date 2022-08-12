@@ -47,7 +47,11 @@ async function match<T>(
     // テンプレートマッチングで最もテンプレートが当てはまる位置を探す
     const dst = new cv.Mat();
     cv.matchTemplate(mat, template, dst, cv.TM_SQDIFF);
-    const { minLoc } = cv.minMaxLoc(dst);
+    // 大きく位置がずれることは想定していないので 16x16 の範囲内から探す
+    const dstRoi = dst.roi(
+      new cv.Rect(0, 0, Math.min(dst.cols, 16), Math.min(dst.rows, 16))
+    );
+    const { minLoc } = cv.minMaxLoc(dstRoi);
 
     // 差分を計算する
     const roi = mat.roi(
