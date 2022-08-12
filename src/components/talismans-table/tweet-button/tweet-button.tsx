@@ -14,6 +14,7 @@ export default function TweetButton({ value }: Props) {
         width="16"
         height="16"
         className={classes.icon}
+        unoptimized
       />
     </a>
   );

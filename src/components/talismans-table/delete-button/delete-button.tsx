@@ -23,6 +23,7 @@ export default function DeleteButton({ value }: Props) {
         width="16"
         height="16"
         className={classes.icon}
+        unoptimized
       />
     </button>
   );
