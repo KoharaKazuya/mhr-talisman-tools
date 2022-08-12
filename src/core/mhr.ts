@@ -13,6 +13,8 @@ export const skillGrades = ["C", "B", "A", "S"] as const;
 /** 護石名 */
 export const talismanNames = [
   "凪の護石",
+  "伝家の護石",
+  "熟練の護石",
   "風立の護石",
   "烈風の護石",
   "鬼雨の護石",
@@ -20,6 +22,9 @@ export const talismanNames = [
   "山嵐の護石",
   "天雷の護石",
   "神嵐の護石",
+  "山海の護石",
+  "極夜の護石",
+  "天上の護石",
 ];
 
 /** 護石 */
@@ -31,7 +36,7 @@ export interface Talisman {
 
 /** 装飾品スロット */
 export interface Slot {
-  level: 1 | 2 | 3;
+  level: 1 | 2 | 3 | 4;
 }
 
 export function createTalisman({
@@ -64,11 +69,11 @@ export function createTalisman({
   )
     throw new Error("Invalid talisman: 護石に必要なデータが与えられていません");
   if (
-    ![1, 2, 3, 4].includes(level1) ||
-    (level2 && ![1, 2, 3, 4].includes(level2)) ||
-    (slot1 && ![1, 2, 3].includes(slot1)) ||
-    (slot2 && ![1, 2, 3].includes(slot2)) ||
-    (slot3 && ![1, 2, 3].includes(slot3))
+    ![1, 2, 3, 4, 5, 6, 7].includes(level1) ||
+    (level2 && ![1, 2, 3, 4, 5, 6, 7].includes(level2)) ||
+    (slot1 && ![1, 2, 3, 4].includes(slot1)) ||
+    (slot2 && ![1, 2, 3, 4].includes(slot2)) ||
+    (slot3 && ![1, 2, 3, 4].includes(slot3))
   )
     throw new Error("Invalid talisman: 護石のパラメーターが不正です");
 

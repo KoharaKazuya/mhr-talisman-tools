@@ -1,4 +1,6 @@
-import { Skill, Slot } from "../core/mhr";
+import { skillGradeData } from "../core/meding-pod-data/common";
+import type { Skill, Slot } from "../core/mhr";
+import { talismanNames } from "../core/mhr";
 import { skillLevelSize, skillNameSize } from "./config";
 import { loadOpenCV } from "./opencv-loader";
 
@@ -13,19 +15,19 @@ export async function matchType(imageData: ImageData): Promise<string | null> {
 export async function matchSkillName(
   imageData: ImageData
 ): Promise<Skill["name"] | "" | null> {
-  return await match(imageData, skillTemplates, 100);
+  return await match(imageData, skillTemplates, 50);
 }
 
 export async function matchSkillLevel(
   imageData: ImageData
 ): Promise<Skill["level"] | null> {
-  return await match(imageData, numberTemplates, 100);
+  return await match(imageData, numberTemplates, 50);
 }
 
 export async function matchSlotLevel(
   imageData: ImageData
 ): Promise<Slot["level"] | 0 | null> {
-  return await match(imageData, slotTemplates, 100);
+  return await match(imageData, slotTemplates, 50);
 }
 
 async function match<T>(
@@ -38,14 +40,23 @@ async function match<T>(
 
   const mat = cv.matFromImageData(imageData);
   cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
-  cv.threshold(mat, mat, 0, 255, cv.THRESH_OTSU);
 
   // 上限付きで最も差分が小さいテンプレートを検索する
   let min = { mean: threshold, target: null as T | null };
   for (const [key, template] of Array.from(templates.entries())) {
-    const roi = mat.roi(new cv.Rect(0, 0, template.cols, template.rows));
+    // テンプレートマッチングで最もテンプレートが当てはまる位置を探す
+    const dst = new cv.Mat();
+    cv.matchTemplate(mat, template, dst, cv.TM_SQDIFF);
+    const { minLoc } = cv.minMaxLoc(dst);
+
+    // 差分を計算する
+    const roi = mat.roi(
+      new cv.Rect(minLoc.x, minLoc.y, template.cols, template.rows)
+    );
     const diff = new cv.Mat();
     cv.absdiff(roi, template, diff);
+
+    // 以前よりも差分の平均値が小さい場合は最終結果となるテンプレートを更新する
     const mean = cv.mean(diff)[0]; // grayscale なので 0 チャンネルのみ
     if (mean < min.mean) min = { mean, target: key };
   }
@@ -65,23 +76,20 @@ function loadSkillTemplates(): Promise<void> {
 }
 
 async function loadAllTemplates() {
-  const types: string[] = await (await fetch("/type/list.json")).json();
-  const skillNames: string[] = await (await fetch("/skill/list.json")).json();
-
   await Promise.all([
     // アンカー (=「装備スキル」という文字) のテンプレートを読み込む
     loadTemplate("/anchor.png").then((mat) => {
       anchorTemplates.set("anchor", mat);
     }),
     // 護石の種類 (=「初心の護石」など) を読み込む
-    ...types.map((type) =>
+    ...talismanNames.map((type) =>
       loadTemplate(`/type/${type}.png`).then((mat) => {
         typeTemplates.set(type, mat);
       })
     ),
     // スキルのテンプレートを読み込む
-    ...skillNames.map((name, i) =>
-      loadTemplate(`/skill/${i}.png`, true).then((mat) => {
+    ...Array.from(skillGradeData.keys()).map((name) =>
+      loadTemplate(`/skill/${name}.png`).then((mat) => {
         skillTemplates.set(name, mat);
       })
     ),
@@ -92,26 +100,26 @@ async function loadAllTemplates() {
       })
     ),
     // スロットのテンプレートを読み込む
-    ...Array.from({ length: 4 }, (_, i) =>
-      loadTemplate(`/slot/${i}.png`, true).then((mat) => {
+    ...Array.from({ length: 5 }, (_, i) =>
+      loadTemplate(`/slot/${i}.png`).then((mat) => {
         slotTemplates.set(i as any, mat);
       })
     ),
   ]);
 
   // スキルなし (= 空文字列) のテンプレートを生成する
-  // 比較時に差分ピクセルの平均値を下げないように 1 文字目のみ比較するため、正方形の形状にする
+  // 比較時に文字が書かれていない部分とマッチしてしまわないようにフルサイズで生成する
   skillTemplates.set(
     "",
-    cv.Mat.zeros(skillNameSize.height, skillNameSize.height, 0)
+    cv.Mat.zeros(skillNameSize.height, skillNameSize.width, 0)
   );
   numberTemplates.set(
     0,
-    cv.Mat.zeros(skillLevelSize.height, skillLevelSize.height, 0)
+    cv.Mat.zeros(skillLevelSize.height, skillLevelSize.width, 0)
   );
 }
 
-async function loadTemplate(url: string, resize = false) {
+async function loadTemplate(url: string) {
   const img = new Image();
   await new Promise((resolve, reject) => {
     img.onload = resolve;
@@ -128,14 +136,6 @@ async function loadTemplate(url: string, resize = false) {
 
   const mat = cv.matFromImageData(imageData);
   cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
-  cv.threshold(mat, mat, 0, 255, cv.THRESH_OTSU);
-  // テンプレートデータは 1920 (1280 の x1.5) 想定で作られているので、リサイズする
-  if (resize) {
-    const size = new cv.Size(
-      Math.round(mat.cols / 1.5),
-      Math.round(mat.rows / 1.5)
-    );
-    cv.resize(mat, mat, size);
-  }
+
   return mat;
 }

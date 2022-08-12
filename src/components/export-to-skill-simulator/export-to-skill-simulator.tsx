@@ -12,7 +12,11 @@ export default function ExportToSkillSimulator() {
       <h2>エクスポート (スキルシミュレーター)</h2>
       <p>
         スキャンした護石のデータを
-        <a href="https://mhrise.wiki-db.com/sim/" target="_blank">
+        <a
+          href="https://mhrise.wiki-db.com/sim/"
+          target="_blank"
+          rel="noreferrer"
+        >
           スキルシミュレータ(泣)
         </a>
         で使用する場合は、以下をコピーしてください。

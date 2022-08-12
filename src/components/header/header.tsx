@@ -7,7 +7,9 @@ import classes from "./header.module.css";
 export default function Header() {
   return (
     <header>
-      <h1>護石ツールズ</h1>
+      <h1>
+        護石ツールズ <small>: モンハンライズサンブレイク対応</small>
+      </h1>
       <nav>
         <NavLink href="/talismans">
           <a className={classes.pageLink}>護石一覧</a>

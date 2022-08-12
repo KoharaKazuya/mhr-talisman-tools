@@ -5,6 +5,6 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     router.push("/scanner");
-  }, []);
+  }, [router]);
   return null;
 }

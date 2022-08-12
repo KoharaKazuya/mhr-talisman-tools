@@ -4,7 +4,6 @@
  * @see https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vQbGSXThYV1IwAp1nffNmnvRZi_GiZwtwUq4lsGfzH04NLmVhmbViEpvSWstl05qXt3DqnXeBiDLC3C/pubhtml#
  */
 
-import { skillGradeData } from "./meding-pod-data/common";
 import {
   deco1SlotWeightedTable,
   deco2SlotWeightedTable,
@@ -13,12 +12,13 @@ import {
   skill1LevelData,
   skill2LevelData,
   skillGradeProbabilities,
-} from "./meding-pod-data/tier4";
+} from "./meding-pod-data/anima";
+import { skillGradeData } from "./meding-pod-data/common";
 import { Skill, SkillGrade, skillGrades, Slot, Talisman } from "./mhr";
 
 /**
  * 与えられた護石と同等またはそれ以上 (= 上位互換のスキルおよびスロットを持つもの)
- * の護石がマカ錬金 (幽玄) で生成される確率を計算する
+ * の護石がマカ錬金 (神気) で生成される確率を計算する
  */
 export function calculateGenerationChance(talisman: Talisman): number {
   const { skills, slots } = talisman;
@@ -143,8 +143,8 @@ function getNumOfSkillsInGrade(grade: SkillGrade): number {
 /** スキルのレベルを選択するとき、指定したスキル以上 (同じ種類で同じかより大きいレベル) のスキルが選ばれる確率を返す */
 function getBetterSkillLevelChance(place: 1 | 2, skill: Skill): number {
   const { name, level } = skill;
-  const weights = (place === 1 ? skill1LevelData : skill2LevelData).get(name);
-  if (!weights) throw new Error(`未知のスキルです: ${name}`);
+  const weights =
+    (place === 1 ? skill1LevelData : skill2LevelData).get(name) ?? [];
   const sum = weights.slice(level - 1).reduce((accu, x) => accu + x, 0);
   return sum / 100;
 }
@@ -166,9 +166,9 @@ function getBetterSlotChance(
   const demand = [slot1, slot2, slot3].sort().reverse();
 
   let chance = 0;
-  for (let s1 = 0 as 0 | 1 | 2 | 3; s1 <= 3; s1 += 1)
-    for (let s2 = 0 as 0 | 1 | 2 | 3; s2 <= 3; s2 += 1)
-      for (let s3 = 0 as 0 | 1 | 2 | 3; s3 <= 3; s3 += 1) {
+  for (let s1 = 0 as 0 | 1 | 2 | 3 | 4; s1 <= 4; s1 += 1)
+    for (let s2 = 0 as 0 | 1 | 2 | 3 | 4; s2 <= 4; s2 += 1)
+      for (let s3 = 0 as 0 | 1 | 2 | 3 | 4; s3 <= 4; s3 += 1) {
         const supply = [s1, s2, s3].sort().reverse();
         if (
           supply[0] < demand[0] ||
@@ -205,7 +205,7 @@ function getSlotLevelChance(
 }
 
 /**
- * 与えられた確率がマカ錬金 (幽玄) で生成される確率においてどの程度のレアさか直感的にわかるようにランク付けする
+ * 与えられた確率がマカ錬金 (神気) で生成される確率においてどの程度のレアさか直感的にわかるようにランク付けする
  */
 export function calculateChanceRank(
   chance: number

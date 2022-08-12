@@ -20,6 +20,7 @@ const slots = [
   { value: 1, label: "Lv1" },
   { value: 2, label: "Lv2" },
   { value: 3, label: "Lv3" },
+  { value: 4, label: "Lv4" },
 ];
 
 type Props = {
@@ -42,7 +43,7 @@ export default function TalismanForm({ onSubmit: onSubmitSuper }: Props) {
                 value: name,
                 label: name,
               }))}
-              defaultValue="神嵐の護石"
+              defaultValue="天上の護石"
             />
           </label>
         </div>
@@ -157,28 +158,31 @@ function useTalismanForm(onSubmit: Props["onSubmit"]) {
   const { handleSubmit, watch } = methods;
   const values = watch();
 
-  const handler = useCallback((data) => {
-    try {
-      const talisman = createTalisman({
-        name: data.name?.value,
-        skill1: data.skill1?.value,
-        level1: data.level1?.value,
-        skill2: data.skill2?.value || undefined,
-        level2: data.skill2?.value
-          ? data.level2?.value || undefined
-          : undefined,
-        slot1: data.slot1?.value,
-        slot2: data.slot1?.value ? data.slot2?.value : undefined,
-        slot3:
-          data.slot1?.value && data.slot2?.value
-            ? data.slot3?.value
+  const handler = useCallback(
+    (data: any) => {
+      try {
+        const talisman = createTalisman({
+          name: data.name,
+          skill1: data.skill1?.value,
+          level1: data.level1?.value,
+          skill2: data.skill2?.value || undefined,
+          level2: data.skill2?.value
+            ? data.level2?.value || undefined
             : undefined,
-      });
-      onSubmit?.(talisman);
-    } catch (e) {
-      console.warn(e);
-    }
-  }, []);
+          slot1: data.slot1?.value,
+          slot2: data.slot1?.value ? data.slot2?.value : undefined,
+          slot3:
+            data.slot1?.value && data.slot2?.value
+              ? data.slot3?.value
+              : undefined,
+        });
+        onSubmit?.(talisman);
+      } catch (e) {
+        console.warn(e);
+      }
+    },
+    [onSubmit]
+  );
 
   return { methods, values, onSubmit: handleSubmit(handler) };
 }

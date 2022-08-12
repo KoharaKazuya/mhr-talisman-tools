@@ -11,6 +11,7 @@ type Props = {
 export default function Result({ talismans, unknownFrames }: Props) {
   const unknownFramesId = useMemo(
     () => String(Math.random()).substring(2),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 変数の一位性を文字列に変換する意図があるため
     [unknownFrames]
   );
   return (

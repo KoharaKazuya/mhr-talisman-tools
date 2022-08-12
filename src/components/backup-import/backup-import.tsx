@@ -27,7 +27,7 @@ export default function BackupImport() {
 
     await setUserTalismans(talismans);
     router.push("/talismans");
-  }, [text]);
+  }, [router, text]);
 
   return (
     <section>

@@ -7,8 +7,8 @@
  *        現状の実装ではそこまでやる必要がない。そのためこのモジュールは現状使用していない。
  */
 
+import { skill1LevelData } from "./meding-pod-data/anima";
 import { skillGradeData } from "./meding-pod-data/common";
-import { skill1LevelData } from "./meding-pod-data/tier4";
 import { Skill, Slot, Talisman } from "./mhr";
 
 /** 全武器で有用なスキル */
@@ -221,7 +221,7 @@ function getSkillValue(skill: Skill): number {
   return valueByGrade[grade] / 2 ** (levelData.length - level);
 }
 
-const valueBySlotLevel = { 3: 50, 2: 45, 1: 15, 0: 0 };
+const valueBySlotLevel = { 4: 70, 3: 50, 2: 45, 1: 15, 0: 0 };
 function getSlotValue(slots: Talisman["slots"]): number {
   return (slots as Slot[]).reduce(
     (accu, slot) => accu + valueBySlotLevel[slot.level ?? 0],

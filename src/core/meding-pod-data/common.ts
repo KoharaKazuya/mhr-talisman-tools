@@ -2,14 +2,11 @@
  * このモジュールはマカ錬金のゲーム内データを管理する
  *
  * データの参照元
- * @see https://www.reddit.com/r/MonsterHunterMeta/comments/mn1gmo/talisman_melding_probabilities_and_system_guide/
- * @see https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vQbGSXThYV1IwAp1nffNmnvRZi_GiZwtwUq4lsGfzH04NLmVhmbViEpvSWstl05qXt3DqnXeBiDLC3C/pubhtml#
+ * @see https://docs.google.com/spreadsheets/d/1XzmYu4TorITdiTXISp-te5Ee_E4HieCOCjVk-x-VLXg/edit#gid=1589192651
  */
 
-import { SkillGrade } from "../mhr";
+import type { SkillGrade } from "../mhr";
 
-// データは [hyperWiki](https://hyperwiki.jp/mhr/alchemy/) より
-// $ curl -s https://hyperwiki.jp/mhr/alchemy/ | pup ':parent-of(:parent-of(#t4)) + * > table tr th, :parent-of(:parent-of(#t4)) + * > table tr td:nth-child(2) text{}'
 export const skillGradeData = new Map<string, SkillGrade>([
   ["攻撃", "A"],
   ["挑戦者", "A"],
@@ -112,4 +109,14 @@ export const skillGradeData = new Map<string, SkillGrade>([
   ["逆襲", "B"],
   ["高速変形", "B"],
   ["鬼火纏", "A"],
+  ["災禍転福", "A"],
+  ["合気", "B"],
+  ["供応", "C"],
+  ["チャージマスター", "A"],
+  ["攻勢", "A"],
+  ["チューンアップ", "A"],
+  ["研磨術【鋭】", "A"],
+  ["刃鱗磨き", "A"],
+  ["壁面移動【翔】", "C"],
+  ["連撃", "A"],
 ]);
