@@ -227,6 +227,10 @@ function areClipsChanged(a: ImageData[], b: ImageData[]): boolean {
     cv.absdiff(ma, mb, diff);
     const mean = cv.mean(diff)[0]; // grayscale なので 0 チャンネルのみ
 
+    ma.delete();
+    mb.delete();
+    diff.delete();
+
     if (mean >= 10) return true;
   }
   return false;

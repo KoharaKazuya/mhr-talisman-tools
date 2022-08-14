@@ -71,7 +71,13 @@ async function match<T>(
     // 以前よりも差分の平均値が小さい場合は最終結果となるテンプレートを更新する
     const mean = cv.mean(diff)[0]; // grayscale なので 0 チャンネルのみ
     if (mean < min.mean) min = { mean, target: key };
+
+    dst.delete();
+    t.delete();
+    diff.delete();
   }
+
+  mat.delete();
 
   return min.target;
 }
