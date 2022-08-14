@@ -54,11 +54,19 @@ async function match<T>(
     const { minLoc } = cv.minMaxLoc(dstRoi);
 
     // 差分を計算する
-    const roi = mat.roi(
-      new cv.Rect(minLoc.x, minLoc.y, template.cols, template.rows)
+    const t = new cv.Mat();
+    cv.copyMakeBorder(
+      template,
+      t,
+      minLoc.y,
+      mat.rows - template.rows - minLoc.y,
+      minLoc.x,
+      mat.cols - template.cols - minLoc.x,
+      cv.BORDER_CONSTANT,
+      new cv.Scalar(0, 0, 0, 255)
     );
     const diff = new cv.Mat();
-    cv.absdiff(roi, template, diff);
+    cv.absdiff(mat, t, diff);
 
     // 以前よりも差分の平均値が小さい場合は最終結果となるテンプレートを更新する
     const mean = cv.mean(diff)[0]; // grayscale なので 0 チャンネルのみ
